@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#17365d">
+<title>Student Wallet — Allowance & Savings</title>
+<style>
+:root{--navy:#17365d;--blue:#eaf2fb;--green:#207a55;--bg:#f4f7fb;--ink:#182230;--muted:#64748b;--card:#fff;--line:#e3eaf2;--red:#b42318}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px system-ui,-apple-system,Segoe UI,Roboto,sans-serif}button,input,select{font:inherit}button{cursor:pointer;border:0;border-radius:12px;padding:11px 14px;font-weight:650}.app{max-width:1000px;margin:auto;min-height:100vh;padding-bottom:126px}.top{background:var(--navy);color:white;padding:24px 18px 26px;border-radius:0 0 24px 24px}.topline{display:flex;justify-content:space-between;align-items:center;gap:12px}.brand{font-size:21px;font-weight:800;letter-spacing:.2px}.sub{color:#d9e7f8;font-size:13px;margin-top:4px}.week{margin-top:20px;font-size:13px;color:#d9e7f8}.balance{font-size:34px;font-weight:800;margin-top:3px}.smallbtn{background:#ffffff1c;color:white;border:1px solid #ffffff55;padding:8px 10px}.content{padding:16px}.tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;background:white;padding:7px;border-radius:16px;box-shadow:0 3px 15px #16365d0c;margin-top:-3px}.tab{background:transparent;color:var(--muted);padding:10px 3px;font-size:12px}.tab.active{background:var(--blue);color:var(--navy)}.panel{display:none}.panel.active{display:block}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.card{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:16px;box-shadow:0 3px 12px #102a4308}.label{font-size:12px;color:var(--muted)}.value{font-size:23px;font-weight:800;margin-top:6px}.green{color:var(--green)}.red{color:var(--red)}h2{font-size:19px;margin:22px 0 12px}h3{font-size:16px;margin:0 0 12px}.muted{color:var(--muted);font-size:13px;line-height:1.5}.row{display:flex;align-items:center;justify-content:space-between;gap:10px}.primary{background:var(--navy);color:white}.secondary{background:var(--blue);color:var(--navy)}.danger{background:#fff0ef;color:var(--red)}.full{width:100%}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}.field label{font-size:12px;color:var(--muted);font-weight:650}.field input,.field select{width:100%;padding:12px;border:1px solid var(--line);border-radius:11px;background:white;color:var(--ink)}.field.wide{grid-column:1/-1}.progress{height:9px;background:#e8edf3;border-radius:30px;overflow:hidden;margin:9px 0}.progress span{height:100%;display:block;background:#23815b;border-radius:30px}.item{padding:13px 0;border-bottom:1px solid var(--line)}.item:last-child{border-bottom:0}.pill{font-size:11px;background:var(--blue);color:var(--navy);border-radius:30px;padding:4px 8px}.empty{padding:22px 8px;text-align:center;color:var(--muted);font-size:13px}.bottomnav{position:fixed;bottom:0;left:0;right:0;background:#ffffffed;backdrop-filter:blur(12px);border-top:1px solid var(--line);padding:6px 8px max(8px,env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(2,auto);gap:4px;z-index:5}.bottomnav button{background:transparent;color:var(--muted);font-size:11px;line-height:1.15;padding:5px 2px;min-width:0;white-space:normal;overflow:visible;text-overflow:clip;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;border-radius:8px}.bottomnav button.active{color:var(--navy);background:var(--blue)}.bottomnav span{display:block;font-size:17px;line-height:1.05;margin-bottom:1px}.tip{background:#f0f7f2;border:1px solid #d6ebdc;border-radius:15px;padding:14px;font-size:13px;line-height:1.5}.lesson{border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:10px;background:white}.lesson p{margin:6px 0;color:var(--muted);font-size:13px;line-height:1.5}.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:130px;background:#172b43;color:white;padding:12px 16px;border-radius:12px;display:none;z-index:10;font-size:13px}.foot{font-size:11px;color:var(--muted);text-align:center;margin:22px 0}.checkline{display:flex;gap:8px;align-items:center;font-size:13px;margin:10px 0}.summary-card{background:linear-gradient(135deg,#f0f7f2,#f4f8fd);border:1px solid #d6ebdc;border-radius:17px;padding:16px;margin:16px 0}.summary-card .summary-title{font-weight:800;color:var(--navy);font-size:16px;margin-bottom:8px}.summary-message{font-size:14px;line-height:1.55;margin:8px 0}.summary-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}.summary-stat{background:#ffffffb8;border:1px solid #dce8e4;border-radius:12px;padding:10px}.summary-stat strong{display:block;font-size:15px;margin-top:4px}.balance-editor{margin-top:12px;padding:14px;background:#fff;border:1px solid var(--line);border-radius:15px}
+@media(min-width:700px){.content{padding:22px}.grid{grid-template-columns:repeat(4,minmax(0,1fr))}.tabs{display:none}.panel{display:block!important;margin-bottom:24px}.layout{display:grid;grid-template-columns:1fr 1fr;gap:18px}.top{padding:30px 26px}.bottomnav{display:none}}
+@media(max-width:380px){.value{font-size:20px}.formgrid{grid-template-columns:1fr}.field.wide{grid-column:auto}.tab{font-size:11px;padding:9px 2px}.bottomnav button{font-size:10px}.bottomnav span{font-size:16px}}
+.account-gate{position:fixed;inset:0;z-index:100;background:linear-gradient(145deg,#17365d,#244f7b);display:flex;align-items:center;justify-content:center;padding:22px}.gate-card{width:100%;max-width:390px;background:#fff;border-radius:24px;padding:28px 22px;box-shadow:0 20px 60px #071b3355}.gate-brand{text-align:center;font-size:25px;font-weight:850;color:var(--navy);margin-bottom:8px}.gate-sub{text-align:center;color:var(--muted);font-size:14px;line-height:1.5;margin-bottom:24px}.gate-card input{font-size:16px}.gate-card .primary{padding:14px}.app.gated{display:none}.menu-wrap{position:relative}.hamburger{width:42px;height:40px;display:flex;align-items:center;justify-content:center;font-size:22px;padding:0;background:#ffffff1c;color:white;border:1px solid #ffffff55}.menu-dropdown{display:none;position:absolute;right:0;top:48px;min-width:185px;background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:13px;padding:7px;box-shadow:0 12px 30px #0003;z-index:40}.menu-dropdown.open{display:block}.menu-dropdown button{display:block;width:100%;text-align:left;background:white;color:var(--ink);padding:11px;border-radius:9px}.menu-dropdown button:hover{background:var(--blue)}
+.more-menu{display:none;position:fixed;right:12px;bottom:76px;z-index:8;background:#fff;border:1px solid var(--line);border-radius:15px;padding:7px;box-shadow:0 12px 32px #102a4330;min-width:190px}.more-menu.open{display:block}.more-menu button{display:block;width:100%;text-align:left;background:#fff;color:var(--ink);padding:12px;border-radius:10px;font-size:14px}.more-menu button:hover{background:var(--blue)}.bottomnav{grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:1fr;gap:2px;padding:7px 8px max(8px,env(safe-area-inset-bottom))}.bottomnav button{white-space:nowrap;font-size:10px;padding:6px 1px;gap:3px}.bottomnav span{font-size:18px;margin:0}@media(min-width:700px){.more-menu{display:none!important}}
+
+.intro-overlay{position:fixed;inset:0;z-index:110;background:linear-gradient(160deg,#edf5ff 0%,#dcecff 100%);display:none;align-items:center;justify-content:center;padding:16px;overflow:auto}
+.intro-card{position:relative;width:100%;max-width:430px;min-height:min(760px,calc(100dvh - 32px));background:linear-gradient(180deg,#fff 0%,#fff 82%,#edf5ff 100%);border:1px solid #d7e7fb;border-radius:28px;padding:25px 23px 22px;box-shadow:0 20px 55px #17365d20;color:var(--ink);display:flex;flex-direction:column;overflow:hidden}
+.intro-brand{display:flex;justify-content:center;align-items:center;gap:10px;color:#173b76;font-size:20px;font-weight:850;letter-spacing:-.5px;margin:0 0 8px}
+.intro-brand-mark{width:42px;height:42px;border-radius:14px;background:#e8f2ff;display:grid;place-items:center;font-size:25px}
+.intro-kicker{font-size:11px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;color:#247d65;text-align:center;margin:5px 0 0}
+.intro-visual{height:245px;min-height:200px;margin:9px 0 12px;border-radius:25px;background:radial-gradient(circle at 50% 48%,#fff 0,#eaf4ff 54%,#dcecff 100%);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.intro-visual:before,.intro-visual:after{content:'';position:absolute;border-radius:50%;background:#cfe5ff;opacity:.8}.intro-visual:before{width:145px;height:145px;left:-35px;top:-32px}.intro-visual:after{width:105px;height:105px;right:-15px;bottom:-25px}
+.intro-art{position:relative;z-index:1;font-size:100px;filter:drop-shadow(0 10px 5px #153d6b20);line-height:1}
+.intro-art-bubble{position:absolute;z-index:2;background:white;border:1px solid #d8e7fb;border-radius:15px;padding:9px 12px;box-shadow:0 8px 18px #1c4b7b18;font-size:24px}
+.intro-art-bubble.one{top:25px;right:24px}.intro-art-bubble.two{bottom:23px;left:25px}.intro-art-bubble.three{bottom:28px;right:30px}
+.intro-card h2{font-size:27px;line-height:1.16;letter-spacing:-.7px;margin:0 0 12px;color:#12366e}
+.intro-card p{font-size:15px;line-height:1.55;color:#48658d;margin:0 0 14px;min-height:68px}
+.intro-dots{display:flex;justify-content:center;gap:8px;margin:14px 0 18px}.intro-dot{width:9px;height:9px;border-radius:50%;background:#c4dcfa}.intro-dot.active{background:#1769e8;width:24px;border-radius:9px}
+.intro-actions{display:flex;gap:10px;margin-top:auto}.intro-actions button{flex:1;border-radius:30px;padding:15px 18px;font-size:15px}.intro-actions .primary{background:linear-gradient(90deg,#2476f5,#145de0);box-shadow:0 8px 18px #1769e833}.intro-actions .secondary{background:#eaf2ff;color:#17437f}
+.intro-skip{background:transparent;color:#6a7e98;font-size:12px;padding:12px;margin-top:5px}
+@media(max-height:700px){.intro-card{min-height:calc(100dvh - 20px);padding:16px 20px}.intro-visual{height:190px;min-height:150px}.intro-art{font-size:78px}.intro-card h2{font-size:23px}.intro-card p{font-size:13px;min-height:48px}.intro-dots{margin:8px 0 12px}}
+@media(min-width:700px){.intro-card{max-width:460px}}
+
+.spending-card{margin:16px 0;background:#fff;border:1px solid var(--line);border-radius:17px;padding:16px;box-shadow:0 3px 12px #102a4308}
+.spending-chart-layout{display:grid;grid-template-columns:minmax(112px,38%) minmax(0,1fr);align-items:center;column-gap:16px;row-gap:14px;margin-top:16px;width:100%}
+.donut-wrap{width:100%;max-width:148px;aspect-ratio:1/1;position:relative;display:grid;place-items:center;margin:0 auto}
+.donut-chart{width:100%;height:100%;border-radius:50%;position:relative;box-shadow:inset 0 0 0 1px #00000008}
+.donut-hole{position:absolute;inset:24%;border-radius:50%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:3px}
+.donut-total{font-size:clamp(13px,4vw,18px);font-weight:850;color:var(--ink);line-height:1.2;white-space:nowrap;font-variant-numeric:tabular-nums}
+.donut-caption{font-size:9px;color:var(--muted);letter-spacing:.45px;line-height:1.2}
+.spending-legend{width:100%;min-width:0;display:grid;gap:0;align-self:stretch;align-content:center}
+.spending-legend-item{display:grid;grid-template-columns:9px minmax(0,1fr) minmax(58px,auto);align-items:center;gap:7px;font-size:12px;padding:7px 0;border-bottom:1px solid #edf1f5;min-width:0}
+.spending-legend-item:last-child{border-bottom:0}
+.spending-dot{width:9px;height:9px;border-radius:3px}
+.spending-category{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink);font-weight:600}
+.spending-values{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;line-height:1.25}
+.spending-values strong{display:block;font-size:12px;color:var(--ink)}
+.spending-values .muted{font-size:10px;display:block;margin-top:2px}
+.spending-empty{padding:18px 8px;text-align:center;color:var(--muted);font-size:13px}
+@media(max-width:350px){.spending-chart-layout{grid-template-columns:104px minmax(0,1fr);column-gap:11px}.donut-wrap{max-width:104px}.spending-legend-item{grid-template-columns:8px minmax(0,1fr) 54px;gap:5px;font-size:11px}.spending-values strong{font-size:11px}}
+@media(min-width:700px){.spending-chart-layout{grid-template-columns:148px minmax(0,1fr);max-width:520px}.spending-legend-item{font-size:13px}}.spending-chart-layout{gap:12px}
+
+.challenge-card{background:linear-gradient(145deg,#f1f8f3,#f4f8fd);border:1px solid #d7e9dd;border-radius:17px;padding:16px;margin:12px 0}.rank-list{list-style:none;padding:0;margin:0}.rank-list li{display:flex;align-items:center;justify-content:space-between;padding:12px 2px;border-bottom:1px solid var(--line)}.rank-list li:last-child{border-bottom:0}.rank-number{font-weight:850;color:var(--green);width:34px}.challenge-input{width:100%;padding:12px;border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--ink)}.cloud-status{font-size:12px;color:var(--muted);margin:8px 0}
+</style>
+</head>
+<body>
+
+<div id="introOverlay" class="intro-overlay" role="dialog" aria-modal="true" aria-label="Student Wallet introduction">
+ <div class="intro-card">
+  <div class="intro-brand"><span class="intro-brand-mark">👛</span><span>Student<br>Wallet</span></div>
+  <div class="intro-kicker" id="introKicker">WELCOME · 1 OF 4</div>
+  <div class="intro-visual" id="introVisual"><span class="intro-art" id="introIcon">🧑‍🎓</span><span class="intro-art-bubble one" id="introBubbleOne">💰</span><span class="intro-art-bubble two" id="introBubbleTwo">✨</span><span class="intro-art-bubble three" id="introBubbleThree">📊</span></div>
+  <h2 id="introTitle">Your money, made easier</h2>
+  <p id="introText">Student Wallet helps you build simple, healthy money habits while you study.</p>
+  <div class="intro-dots" aria-hidden="true"><span class="intro-dot active"></span><span class="intro-dot"></span><span class="intro-dot"></span><span class="intro-dot"></span></div>
+  <div class="intro-actions"><button type="button" class="secondary" id="introBack" style="display:none">Back</button><button type="button" class="primary" id="introNext">Next →</button></div>
+  <button type="button" class="intro-skip full" id="introSkip">Skip introduction</button>
+ </div>
+</div>
+
+<div id="accountGate" class="account-gate" style="display:none">
+ <div class="gate-card">
+  <div class="gate-brand">🎓 Student Wallet</div>
+  <div class="gate-sub">Welcome! Create your username to get started and manage your student finances.</div>
+  <form id="firstAccountForm">
+   <div class="field"><label for="firstUsername">Username</label><input id="firstUsername" maxlength="30" autocomplete="nickname" placeholder="Enter your username" required></div>
+   <button class="primary full" type="submit">Create account</button>
+  </form>
+ </div>
+</div>
+<div class="app" id="walletApp">
+<header class="top">
+ <div class="topline"><div><div class="brand">🎓 Student Wallet</div><div class="sub">Small steps. Strong money habits.</div><div id="welcomeUser" style="font-size:12px;color:#fff;margin-top:7px">Welcome to your Student Wallet</div></div><div class="menu-wrap"><button class="hamburger" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false">☰</button><div class="menu-dropdown" id="menuDropdown"><button id="accountBtn">👤 Account / Username</button><button id="exportBtn">📤 Export data</button></div></div></div>
+ <div class="week">MONEY LEFT THIS WEEK</div><div class="balance" id="heroBalance">₱0.00</div><div class="sub" id="heroSub">Add your allowance to get started</div>
+</header>
+<div class="content">
+<nav class="tabs" id="tabs" aria-label="Main navigation">
+<button class="tab active" data-tab="home">Home</button><button class="tab" data-tab="activity">Activity</button><button class="tab" data-tab="budget">Budget</button><button class="tab" data-tab="goals">Savings</button><button class="tab" data-more="true">More</button>
+</nav>
+<section class="panel active" id="home">
+<div class="grid" style="margin-top:15px">
+<div class="card"><div class="label">Allowance received</div><div class="value" id="kIncome">₱0</div><div class="muted">This week</div></div>
+<div class="card"><div class="label">Spent</div><div class="value" id="kSpent">₱0</div><div class="muted">This week</div></div>
+<div class="card"><div class="label">Saved this week</div><div class="value green" id="kSaved">₱0</div><div class="muted">Savings transfers</div></div>
+<div class="card"><div class="label">Weekly spending limit</div><div class="value" id="kTarget">₱750</div><div class="muted">Your planned spending cap</div></div>
+</div>
+<div class="summary-card" id="weeklySummary">
+<div class="summary-title">📊 Your weekly finance summary</div>
+<div class="summary-message" id="summaryMessage">Record your allowance and expenses to see your weekly insights.</div>
+<div class="summary-stats"><div class="summary-stat"><span class="label">Biggest expense</span><strong id="summaryBiggest">—</strong></div><div class="summary-stat"><span class="label">Expense share</span><strong id="summaryShare">0%</strong></div><div class="summary-stat"><span class="label">Money left</span><strong id="summaryLeft">₱0.00</strong></div></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px"><button class="primary" id="viewReceiptBtn">🧾 View mini receipt</button><button class="secondary" id="downloadReceiptBtn">⬇ Download receipt</button></div>
+</div>
+<div class="spending-card" id="spendingByCategoryCard"><div class="row"><div><h3 style="margin:0">Spending by Category</h3><div class="muted">See how your expenses are divided this week.</div></div><span class="pill">Donut chart</span></div><div id="spendingChart"><div class="spending-empty">Record an expense to see your spending breakdown.</div></div></div>
+<div class="card" style="margin-bottom:16px"><div class="row"><div><h3 style="margin:0">Update your current money</h3><div class="muted">Enter the amount you have available right now.</div></div><button class="secondary" id="toggleBalanceEditor">Update</button></div>
+<div class="balance-editor" id="balanceEditor" style="display:none"><div class="field"><label for="currentBalanceInput">Current available money (₱)</label><input id="currentBalanceInput" type="number" min="0" step="0.01" placeholder="e.g. 650"></div><div class="row"><button class="primary" id="saveCurrentBalance">Save current amount</button><button class="secondary" id="clearCurrentBalance">Use transaction total</button></div><p class="muted" style="margin-bottom:0">Your entered balance is adjusted when you record new allowance, expenses, refunds, or savings transfers. Weekly insights still use your recorded transactions.</p></div></div>
+<div class="layout">
+<div><h2>This week's plan</h2><div class="card"><div class="row"><h3 style="margin:0">Budget used</h3><strong id="budgetPercent">0%</strong></div><div class="progress"><span id="budgetBar" style="width:0%"></span></div><div class="row muted"><span id="spentOfBudget">₱0 spent</span><span id="budgetLeft">₱750 spending limit</span></div><div style="margin-top:14px" class="row"><span class="muted">Next step</span><button class="secondary" data-goto="activity">+ Add transaction</button></div></div>
+<h2>Quick add</h2><div class="grid"><button class="primary" data-quick="Allowance">＋ Allowance</button><button class="secondary" data-quick="Expense">− Expense</button><button class="secondary" data-quick="Savings Transfer">↗ Save money</button><button class="secondary" data-goto="budget">▦ Edit budget</button></div></div>
+<div><h2>Recent activity</h2><div class="card" id="recentList"><div class="empty">No transactions yet. Add your allowance first.</div></div><h2>Student money tip</h2><div class="tip" id="dailyTip">Try recording each purchase right after you make it. Small purchases count too.</div></div>
+</div>
+</section>
+<div class="developer-credit" style="text-align:center;margin:26px 0 10px;padding:14px 10px;border-top:1px solid var(--line);color:var(--muted);font-size:12px;line-height:1.5">Developed by <strong style="color:var(--ink)">Mr. Vengie Baculo</strong><br>2nd year BSIT student</div>
+<section class="panel" id="activity">
+<h2>Record money movement</h2><div class="card">
+<form id="txForm"><div class="formgrid">
+<div class="field"><label for="txType">Type</label><select id="txType"><option>Allowance</option><option>Extra from Parents</option><option>Expense</option><option>Savings Transfer</option><option>Refund</option><option>Utang</option><option>Bayad Utang</option><option>Sukli Return</option></select></div>
+<div class="field"><label for="txAmount">Amount (₱)</label><input id="txAmount" type="number" min="0.01" step="0.01" placeholder="e.g. 750" required></div>
+<div class="field" id="txCategoryField"><label for="txCategory">Category</label><select id="txCategory"><option>Food</option><option>Transportation</option><option>School supplies</option><option>Mobile data</option><option>Emergency fund</option><option>Savings</option><option>Dorm essentials</option><option>Laundry</option><option>Personal care</option><option>Health</option><option>Entertainment</option><option>Other</option></select></div>
+<div class="field"><label for="txDate">Date</label><input id="txDate" type="date" required></div>
+<div class="field wide"><label for="txDesc">Description</label><input id="txDesc" placeholder="e.g. weekly allowance / lunch / jeepney fare"></div>
+<div class="field" id="txPriorityField"><label for="txNeed">Expense priority</label><select id="txNeed"><option>Need</option><option>Want</option></select></div>
+<div class="field"><label for="txNotes">Notes (optional)</label><input id="txNotes" placeholder="Optional"></div>
+</div><button class="primary full" type="submit">Save transaction</button></form></div>
+<div class="row" style="margin-top:22px;margin-bottom:12px;align-items:center"><h2 style="margin:0">Transaction history</h2><button class="danger" id="clearAllRecordsBtn" type="button" style="font-size:12px;padding:9px 11px">Clear all records</button></div><div class="card"><div class="row" style="margin-bottom:12px"><div class="muted">Newest first</div><select id="filterType" style="border:1px solid var(--line);padding:8px;border-radius:10px"><option>All</option><option>Allowance</option><option>Extra from Parents</option><option>Expense</option><option>Savings Transfer</option><option>Refund</option><option>Utang</option><option>Bayad Utang</option><option>Sukli Return</option></select></div><div id="allTransactions"><div class="empty">No activity yet.</div></div></div>
+</section>
+<section class="panel" id="budget">
+<h2>Weekly spending target</h2><div class="card"><p class="muted">Set the maximum amount you plan to spend this week. This is your spending limit, not your total allowance. For example, if you receive ₱1,000, you might set a ₱700 weekly spending target and keep the rest for savings or other needs.</p><div class="field"><label for="weeklyAllowance">Planned weekly spending limit (₱)</label><input id="weeklyAllowance" type="number" min="0" step="50" value="750"></div><div class="field"><label for="weekStart">Week starting</label><input id="weekStart" type="date"></div><button id="saveBudget" class="primary full">Save budget settings</button></div>
+<h2>Plan your categories</h2><div class="card" id="categoryBudget"></div><p class="muted">Suggested amounts are examples, not rules. Cover necessary food, transportation, and school costs before deciding how much you can save.</p>
+</section>
+<section class="panel" id="goals">
+<h2>Your savings goals</h2><div class="card"><form id="goalForm"><div class="formgrid"><div class="field"><label for="goalName">Goal name</label><input id="goalName" placeholder="e.g. emergency fund" required></div><div class="field"><label for="goalTarget">Target amount (₱)</label><input id="goalTarget" type="number" min="1" step="1" placeholder="2000" required></div></div><button class="primary full" type="submit">Add savings goal</button></form></div><h2>Progress</h2><div id="goalList"></div><div class="tip" style="margin-top:12px">Starter idea: aim for a small emergency fund first. Even ₱20–₱50 saved in a tight week counts; don't skip meals or essential transport just to hit a target.</div></section>
+<section class="panel" id="loans">
+<h2>Utang at Sukli Tracker</h2>
+<div class="grid">
+<div class="card"><div class="label">Ikaw ang may utang</div><div class="value red" id="loanOwe">₱0.00</div></div>
+<div class="card"><div class="label">May utang sa'yo</div><div class="value green" id="loanOwed">₱0.00</div></div>
+<div class="card"><div class="label">Sukli na kailangan mong ibalik</div><div class="value red" id="changeYouOwe">₱0.00</div></div>
+<div class="card"><div class="label">Sukli na kailangan nilang ibalik</div><div class="value green" id="changeOwedToYou">₱0.00</div></div>
+</div>
+<h2>Mag-record ng utang</h2><div class="card"><form id="loanForm"><div class="formgrid">
+<div class="field"><label>Uri</label><select id="loanDirection"><option value="theyOwe">May utang sa akin</option><option value="iOwe">Ako ang may utang</option></select></div>
+<div class="field"><label>Pangalan</label><input id="loanPerson" required placeholder="Pangalan ng friend"></div>
+<div class="field"><label>Halaga (₱)</label><input id="loanAmount" type="number" min="0.01" step="0.01" required></div>
+<div class="field"><label>Petsa</label><input id="loanDate" type="date" required></div>
+<div class="field wide"><label>Note (optional)</label><input id="loanNote" placeholder="Para saan ang utang"></div>
+</div><button class="primary full">Save utang</button></form></div>
+<h2>Mga sariling record ng utang at sukli</h2><p class="muted">Lahat ng utang, bayad, at pagbabalik ng sukli ay makikita rito. Makikita rin ang mga ito sa Activity.</p><div class="card" id="loanList"><div class="empty">Wala pang recorded na utang.</div></div>
+<p class="muted">Kapag may sobrang bayad, ilagay ang total na perang natanggap/ibinigay. Ire-record ng app ang sobra bilang sukli na dapat ibalik ng kabilang panig. I-record ang partial/full na pagbabalik ng sukli sa actions.</p>
+</section>
+<section class="panel" id="challenge">
+<h2>🏆 Money Challenge</h2>
+<p class="muted">Compete with friends to finish each week with the most money left. When you enable the challenge, your weekly remaining-money score is stored privately so the ranking can be calculated. Your transactions stay on this device; friends only see usernames and ranks, never exact balances.</p>
+<div class="challenge-card"><div class="row"><div><div class="label">YOUR CURRENT WEEKLY RANK</div><div class="value green" id="myChallengeRank">—</div></div><div style="text-align:right"><div class="label">ROUND ENDS</div><strong id="challengeWeekEnd">Sunday</strong></div></div><p class="muted" id="challengeRoundNote" style="margin-bottom:0">Create or join a private group to start competing.</p></div>
+<div class="card"><h3>Connect to Money Challenge</h3><p class="muted">This is separate from your local wallet. Set up a free Supabase project, then enter its Project URL and anon/public key here. Never use a service-role key.</p>
+<div class="field"><label for="sbUrl">Supabase Project URL</label><input id="sbUrl" class="challenge-input" placeholder="https://your-project.supabase.co" autocomplete="url"></div>
+<div class="field"><label for="sbKey">Supabase anon / publishable key</label><input id="sbKey" class="challenge-input" placeholder="Paste anon/public key" autocomplete="off"></div>
+<button class="primary full" id="saveCloudConfig">Connect service</button><div class="cloud-status" id="cloudStatus">Not connected. Your personal wallet continues to work locally.</div>
+</div>
+<div class="card" id="challengeAuthCard" style="margin-top:12px"><h3>Challenge account</h3><p class="muted">Use an email and password for the online competition account. This does not replace your Student Wallet username.</p><div class="field"><label for="challengeEmail">Email</label><input id="challengeEmail" class="challenge-input" type="email" placeholder="you@example.com" autocomplete="email"></div><div class="field"><label for="challengePassword">Password</label><input id="challengePassword" class="challenge-input" type="password" placeholder="At least 6 characters" autocomplete="current-password"></div><div class="row"><button class="primary" id="challengeSignUp">Sign up</button><button class="secondary" id="challengeSignIn">Log in</button></div><button class="danger full" id="challengeSignOut" style="display:none;margin-top:10px">Log out of challenge</button></div>
+<div class="card" id="challengeGroupCard" style="display:none;margin-top:12px"><h3>Private friend group</h3><div class="field"><label for="challengeGroupName">Create a group</label><input id="challengeGroupName" class="challenge-input" maxlength="40" placeholder="e.g. Dorm Budget Buddies"></div><button class="primary full" id="createChallengeGroup">Create group & invite friends</button><div class="field" style="margin-top:14px"><label for="challengeInviteCode">Join with invite code</label><input id="challengeInviteCode" class="challenge-input" maxlength="12" placeholder="Enter invite code"></div><button class="secondary full" id="joinChallengeGroup">Join group</button><div id="myChallengeGroups" style="margin-top:14px"></div></div>
+<div class="card" id="challengeBoardCard" style="display:none;margin-top:12px"><div class="row"><h3 style="margin:0">Weekly leaderboard</h3><button class="secondary" id="refreshChallengeBoard" style="padding:8px 10px">Refresh</button></div><div class="muted" id="activeChallengeGroup" style="margin:6px 0 10px"></div><ol class="rank-list" id="challengeLeaderboard"><li class="empty">No rankings yet.</li></ol><p class="muted" style="margin:12px 0 0">Only rank and username are displayed. Exact balances are not returned by the leaderboard.</p><button class="primary full" id="submitChallengeScore" style="margin-top:12px">Update my weekly ranking</button></div>
+</section>
+<section class="panel" id="learn">
+<h2>Money lessons for college life</h2><p class="muted">Short lessons you can practice even before you have a job.</p><div id="lessons"></div>
+</section>
+<div class="foot">Your data is saved in this browser on this device. Export a backup regularly. Do not store PINs, passwords, or OTPs here.</div>
+</div>
+</div>
+<div class="more-menu" id="moreMenu" aria-label="More sections"><button data-tab="challenge">🏆 Money Challenge</button><button data-tab="learn">📘 Learn</button><button data-tab="loans">↔ Utang & Sukli</button></div>
+<nav class="bottomnav" id="bottomnav" aria-label="Main navigation"><button class="active" data-tab="home"><span>⌂</span>Home</button><button data-tab="activity"><span>＋</span>Activity</button><button data-tab="budget"><span>▦</span>Budget</button><button data-tab="goals"><span>◎</span>Savings</button><button id="moreBtn" aria-expanded="false"><span>☰</span>More</button></nav>
+
+<div id="accountModal" style="display:none;position:fixed;inset:0;background:#10243dcc;z-index:30;padding:18px;overflow:auto">
+<div style="max-width:380px;margin:60px auto;background:#fff;border-radius:18px;padding:20px;box-shadow:0 15px 50px #0003;color:#182230"><h3 id="accountTitle">Create your account</h3><p class="muted">Enter a username to personalize your Student Wallet. Your data stays saved on this device.</p><form id="accountForm"><div class="field"><label for="usernameInput">Username</label><input id="usernameInput" maxlength="30" autocomplete="nickname" placeholder="Enter username" required></div><button class="primary full" type="submit">Create username</button></form><button class="secondary full" id="closeAccountBtn" style="margin-top:8px">Cancel</button></div></div>
+<div id="receiptModal" style="display:none;position:fixed;inset:0;background:#10243dcc;z-index:20;padding:18px;overflow:auto">
+<div style="max-width:440px;margin:20px auto;background:#fff;border-radius:18px;padding:18px;box-shadow:0 15px 50px #0003"><div class="row"><h3 style="margin:0">Mini financial receipt</h3><button class="secondary" id="closeReceiptBtn">✕</button></div><div id="receiptPreview" style="margin-top:14px"></div><div style="display:flex;gap:8px;margin-top:14px"><button class="primary full" id="modalDownloadReceiptBtn">⬇ Download PNG</button><button class="secondary full" id="modalPrintReceiptBtn">Print / Save PDF</button></div><p class="muted">Your receipt uses this week's recorded transactions and current balance. Download as an image or print/save as PDF.</p></div></div>
+<div id="loanReceiptModal" style="display:none;position:fixed;inset:0;background:#10243dcc;z-index:25;padding:18px;overflow:auto">
+<div style="max-width:440px;margin:20px auto;background:#fff;border-radius:18px;padding:18px;box-shadow:0 15px 50px #0003"><div class="row"><h3 style="margin:0">Utang receipt</h3><button class="secondary" id="closeLoanReceiptBtn">✕</button></div><div id="loanReceiptPreview" style="margin-top:14px"></div><div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap"><button class="primary full" id="downloadLoanReceiptBtn">⬇ Save receipt to phone</button><button class="secondary full" id="printLoanReceiptBtn">Print / Save PDF</button></div><p class="muted">Download saves an image to your phone's Downloads. Print / Save PDF opens the print dialog where available.</p></div></div>
+<div class="toast" id="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const $=id=>document.getElementById(id);
+const money=n=>new Intl.NumberFormat('en-PH',{style:'currency',currency:'PHP',maximumFractionDigits:2}).format(Number(n)||0);
+const isoToday=()=>{let d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+const startOfWeek=(s)=>{let d=new Date((s||isoToday())+'T12:00:00');let day=d.getDay();d.setDate(d.getDate()-(day===0?6:day-1));return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+const defaultBudget=[['Food',300],['Transportation',100],['School supplies',50],['Mobile data',50],['Emergency fund',75],['Savings',125],['Dorm essentials',25],['Flexible / buffer',25]];
+let state={transactions:[],username:'',goals:[{id:1,name:'Starter emergency fund',target:2000,saved:0},{id:2,name:'Personal savings',target:3000,saved:0}],weeklyAllowance:750,currentBalance:null,weekStart:startOfWeek(isoToday()),budgets:defaultBudget.map(([name,planned])=>({name,planned})),nextId:3,loans:[]};
+try{const saved=localStorage.getItem('studentWalletAppV2');if(saved){const parsed=JSON.parse(saved);state={...state,...parsed};if(!Array.isArray(state.loans))state.loans=[]}else{localStorage.removeItem('studentWalletAppV1');localStorage.setItem('studentWalletAppV2',JSON.stringify(state));}}catch(e){}
+// Keep the dashboard on the current week when a previously saved week has passed. Older transactions remain in history.
+try{const currentWeek=startOfWeek(isoToday());if(!state.weekStart||dateKey(state.weekStart)<currentWeek)state.weekStart=currentWeek;}catch(e){}
+const gate=$('accountGate'),walletApp=$('walletApp');
+function showAccountGate(){gate.style.display='flex';walletApp.classList.add('gated');$('firstUsername').focus()}
+function showWallet(){gate.style.display='none';walletApp.classList.remove('gated')}
+const introSlides=[
+ {icon:'🧑‍🎓',bubbles:['💰','✨','👛'],title:'Your money, made easier',text:'Build healthy money habits and take control of your finances as a student — one small step at a time.'},
+ {icon:'📱',bubbles:['💸','🚌','📈'],title:'Track your allowance',text:'Record your allowance, expenses, and spending so you can see where your money goes and what you have left.'},
+ {icon:'🐷',bubbles:['📒','🎯','🪙'],title:'Plan. Save. Reach your goals.',text:'Set a budget, grow your savings, and use the Utang & Sukli tracker to stay on track.'},
+ {icon:'🛡️',bubbles:['🔐','👛','✓'],title:'Your privacy matters.',text:'Your wallet data stays in this browser on this device. Student Wallet does not send your wallet entries to a server. Anyone with access to this browser may see them.'}
+];
+let introIndex=0;
+function renderIntro(){
+ const s=introSlides[introIndex];
+ $('introKicker').textContent=`Welcome to Student Wallet · ${introIndex+1} of ${introSlides.length}`;
+ $('introIcon').textContent=s.icon;$('introTitle').textContent=s.title;$('introText').textContent=s.text;
+ ['introBubbleOne','introBubbleTwo','introBubbleThree'].forEach((id,i)=>$(id).textContent=s.bubbles[i]);
+ document.querySelectorAll('.intro-dot').forEach((d,i)=>d.classList.toggle('active',i===introIndex));
+ $('introBack').style.display=introIndex===0?'none':'block';
+ $('introNext').textContent=introIndex===introSlides.length-1?'Get Started →':'Next →';
+}
+function showIntro(){introIndex=0;renderIntro();$('introOverlay').style.display='flex';walletApp.classList.add('gated')}
+function finishIntro(){try{localStorage.setItem('studentWalletIntroSeen','1')}catch(e){}$('introOverlay').style.display='none';showWallet();render()}
+$('introNext').addEventListener('click',()=>{if(introIndex<introSlides.length-1){introIndex++;renderIntro()}else finishIntro()});
+$('introBack').addEventListener('click',()=>{if(introIndex>0){introIndex--;renderIntro()}});
+$('introSkip').addEventListener('click',finishIntro);
+if(state.username&&state.username.trim()){showWallet();}else showAccountGate();
+$('firstAccountForm').addEventListener('submit',e=>{e.preventDefault();const username=$('firstUsername').value.trim();if(!username){$('firstUsername').focus();return}state.username=username;persist();showIntro();toast(`Welcome, ${username}!`)});
+function persist(){try{localStorage.setItem('studentWalletAppV2',JSON.stringify(state))}catch(e){toast('Could not save locally. Please export a backup.')}render();if(typeof challengeClient!=='undefined'&&challengeClient&&challengeUser&&activeChallengeGroup)updateChallengeScore(false)}
+function toast(msg){$('toast').textContent=msg;$('toast').style.display='block';setTimeout(()=>$('toast').style.display='none',2300)}
+function dateKey(value){
+ const raw=String(value??'').trim();
+ const match=raw.match(/^(\d{4}-\d{2}-\d{2})/);
+ return match?match[1]:'';
+}
+function inWeek(t){
+ const date=dateKey(t.date),start=dateKey(state.weekStart);
+ if(!date||!start)return false;
+ return date>=start&&date<addDays(start,7);
+}
+function addDays(s,n){let d=new Date(s+'T12:00:00');d.setDate(d.getDate()+n);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function sum(list,fn){return list.reduce((a,x)=>a+fn(x),0)}
+function weekly(){return state.transactions.filter(inWeek)}
+function totals(){let ts=weekly();let income=sum(ts.filter(t=>['Allowance','Extra from Parents','Refund'].includes(t.type)),t=>t.amount);let spent=sum(ts.filter(t=>t.type==='Expense'),t=>t.amount);let saved=sum(ts.filter(t=>t.type==='Savings Transfer'),t=>t.amount);let expenses=ts.filter(t=>t.type==='Expense');let byCategory={};expenses.forEach(t=>{byCategory[t.category]=(byCategory[t.category]||0)+t.amount});let biggest=Object.entries(byCategory).sort((a,b)=>b[1]-a[1])[0]||null;return {income,spent,saved,left:income-spent-saved,biggest,expenseCount:expenses.length}}
+function safe(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function transactionHtml(t){let sign=['Allowance','Extra from Parents','Refund'].includes(t.type)?'+':t.type==='Savings Transfer'?'↗':'−';let color=sign==='+'?'green':sign==='−'?'red':'';return `<div class="item row"><div style="min-width:0"><strong>${safe(t.description||t.category)}</strong><div class="muted">${safe(t.date)} · ${safe(t.category)} · ${safe(t.type)}</div></div><strong class="${color}" style="white-space:nowrap">${sign}${money(t.amount)}</strong></div>`}
+let balanceEditorOpen=false;
+function renderSpendingChart(){
+ const expenses=weekly().filter(t=>t.type==='Expense'&&Number(t.amount)>0);
+ const byCategory={};
+ expenses.forEach(t=>{const name=String(t.category||'Uncategorized').trim()||'Uncategorized';byCategory[name]=(byCategory[name]||0)+Number(t.amount)});
+ const entries=Object.entries(byCategory).sort((a,b)=>b[1]-a[1]);
+ const total=entries.reduce((sum,item)=>sum+item[1],0);
+ const host=$('spendingChart');
+ if(!entries.length||total<=0){host.innerHTML='<div class="spending-empty">No expenses recorded for this week yet. Add an expense to see your category breakdown.</div>';return}
+ const palette=['#207a55','#367cc4','#e4a344','#9475c5','#d46b6b','#399b9b','#7d8795','#b58a55','#5b83a8','#9a6b9a','#6d9c55','#c17c45'];
+ let cursor=0;const stops=entries.map((entry,i)=>{const pct=entry[1]/total*100;const start=cursor;cursor+=pct;return `${palette[i%palette.length]} ${start.toFixed(3)}% ${cursor.toFixed(3)}%`}).join(', ');
+ const legend=entries.map(([name,amount],i)=>{const pct=amount/total*100;return `<div class="spending-legend-item"><span class="spending-dot" style="background:${palette[i%palette.length]}"></span><span class="spending-category">${safe(name)}</span><span class="spending-values"><strong>${pct.toFixed(1)}%</strong><span class="muted">${money(amount)}</span></span></div>`}).join('');
+ host.innerHTML=`<div class="spending-chart-layout"><div class="donut-wrap"><div class="donut-chart" role="img" aria-label="Donut chart showing spending by category" style="background:conic-gradient(${stops})"></div><div class="donut-hole"><span class="donut-caption">TOTAL SPENT</span><strong class="donut-total">${money(total)}</strong></div></div><div class="spending-legend">${legend}</div></div><p class="muted" style="margin:12px 0 0">Percentages are based on your recorded expenses only. Allowance and savings transfers are excluded.</p>`;
+}
+function render(){
+$('welcomeUser').textContent=state.username?`Welcome, ${state.username}!`:'Welcome to your Student Wallet';
+const ts=weekly(),tot=totals();renderSpendingChart();let displayedBalance=state.currentBalance===null||state.currentBalance===undefined?tot.left:Number(state.currentBalance);$('heroBalance').textContent=money(displayedBalance);$('heroSub').textContent=state.currentBalance===null||state.currentBalance===undefined?(tot.left<0?'You are over this week’s recorded money. Review your spending.':`Week starting ${state.weekStart}`):'Current balance you entered · adjusted with new transactions';
+$('summaryBiggest').textContent=tot.biggest?`${tot.biggest[0]} · ${money(tot.biggest[1])}`:'—';$('summaryShare').textContent=tot.spent>0&&tot.biggest?Math.round(tot.biggest[1]/tot.spent*100)+'%':'0%';$('summaryLeft').textContent=money(displayedBalance);
+let summaryText='';if(!ts.length){summaryText='Add your allowance and expenses to get a personalized weekly finance summary.'}else if(tot.spent===0){summaryText=`You have recorded ${money(tot.income)} in income and no expenses yet this week. Keep recording purchases to see your biggest expense.`}else{let category=tot.biggest?tot.biggest[0]:'expenses';let share=tot.biggest?Math.round(tot.biggest[1]/tot.spent*100):0;summaryText=`Your biggest expense this week is ${category}: ${money(tot.biggest[1])} (${share}% of recorded expenses). You recorded ${money(tot.spent)} in total expenses and ${money(tot.saved)} in savings transfers.`;if(displayedBalance<0)summaryText+=' Your recorded money is below zero—review upcoming essentials and update your balance if needed.';else if(tot.saved>0)summaryText+=` Nice work putting ${money(tot.saved)} toward savings.`;else if(tot.income>0)summaryText+=' Consider setting aside a small amount for savings after essentials are covered.'}
+$('summaryMessage').textContent=summaryText;$('currentBalanceInput').value=state.currentBalance===null||state.currentBalance===undefined?'':state.currentBalance;$('balanceEditor').style.display=balanceEditorOpen?'block':'none';$('toggleBalanceEditor').textContent=balanceEditorOpen?'Close':'Update';
+$('kIncome').textContent=money(tot.income);$('kSpent').textContent=money(tot.spent);$('kSaved').textContent=money(tot.saved);$('kTarget').textContent=money(state.weeklyAllowance);
+let pct=state.weeklyAllowance?Math.min(100,tot.spent/state.weeklyAllowance*100):0;$('budgetPercent').textContent=Math.round(pct)+'%';$('budgetBar').style.width=pct+'%';$('spentOfBudget').textContent=money(tot.spent)+' spent';$('budgetLeft').textContent=money(state.weeklyAllowance-tot.spent)+' of allowance budget';
+const recent=[...ts].sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id).slice(0,4);$('recentList').innerHTML=recent.length?recent.map(transactionHtml).join(''):'<div class="empty">No transactions this week. Add your allowance first.</div>';
+const filter=$('filterType')?.value||'All';let all=[...state.transactions].sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id).filter(t=>filter==='All'||t.type===filter);$('allTransactions').innerHTML=all.length?all.map(t=>transactionHtml(t)+`<div style="text-align:right;margin-top:-5px;margin-bottom:8px"><button class="danger" style="padding:6px 10px;font-size:12px" onclick="deleteTx(${t.id})">Delete</button></div>`).join(''):'<div class="empty">No transactions match this filter.</div>';
+$('weeklyAllowance').value=state.weeklyAllowance;$('weekStart').value=state.weekStart;
+$('categoryBudget').innerHTML=state.budgets.map((b,i)=>{let actual=sum(ts.filter(t=>t.type==='Expense'&&t.category===b.name),t=>t.amount);return `<div class="item"><div class="row"><strong>${safe(b.name)}</strong><span class="muted">Actual ${money(actual)}</span></div><div class="formgrid" style="margin-top:8px"><div class="field" style="margin:0"><label>Planned amount (₱)</label><input type="number" min="0" step="10" value="${b.planned}" onchange="updateCat(${i},this.value)"></div><div><div class="muted">Left / over</div><strong class="${b.planned-actual<0?'red':'green'}">${money(b.planned-actual)}</strong></div></div></div>`}).join('');
+$('goalList').innerHTML=state.goals.length?state.goals.map(g=>{let p=Math.min(100,g.target?g.saved/g.target*100:0);return `<div class="card" style="margin-bottom:10px"><div class="row"><strong>${safe(g.name)}</strong><span class="pill">${Math.round(p)}%</span></div><div class="progress"><span style="width:${p}%"></span></div><div class="row muted"><span>${money(g.saved)} saved</span><span>Target ${money(g.target)}</span></div><div class="row" style="margin-top:12px"><button class="secondary" onclick="addToGoal(${g.id})">＋ Add savings</button><button class="danger" onclick="deleteGoal(${g.id})">Delete</button></div></div>`}).join(''):'<div class="empty">Add a savings goal above.</div>';
+renderLoans();
+}
+function freezeDisplayedBalance(){
+ if(state.currentBalance===null||state.currentBalance===undefined){
+  const currentTotals=totals();
+  state.currentBalance=currentTotals.left;
+ }
+}
+window.deleteTx=id=>{
+ if(!confirm('Delete this transaction? The dashboard balance will stay the same.'))return;
+ freezeDisplayedBalance();
+ state.transactions=state.transactions.filter(t=>t.id!==id);
+ persist();
+ toast('Activity deleted. Your balance was preserved.');
+};
+function clearAllRecords(){
+ if(!state.transactions.length){toast('There are no activity records to clear.');return}
+ if(!confirm('Clear ALL activity records? This cannot be undone. Your current dashboard balance and savings goals will be kept.'))return;
+ freezeDisplayedBalance();
+ state.transactions=[];
+ persist();
+ toast('All activity records cleared. Your balance was preserved.');
+}
+$('clearAllRecordsBtn').addEventListener('click',clearAllRecords);
+window.updateCat=(i,v)=>{state.budgets[i].planned=Math.max(0,Number(v)||0);try{localStorage.setItem('studentWalletAppV2',JSON.stringify(state))}catch(e){}render()};
+window.deleteGoal=id=>{if(confirm('Delete this savings goal?')){state.goals=state.goals.filter(g=>g.id!==id);persist()}};
+window.addToGoal=id=>{let g=state.goals.find(x=>x.id===id);if(!g)return;let val=prompt(`How much are you adding to ${g.name}? (₱)`);if(val===null)return;let n=Number(val);if(!Number.isFinite(n)||n<=0){toast('Enter an amount greater than zero.');return}g.saved+=n;if(state.currentBalance!==null&&state.currentBalance!==undefined)state.currentBalance=Math.max(0,Number(state.currentBalance)-n);state.transactions.push({id:state.nextId++,date:isoToday(),type:'Savings Transfer',category:g.name.toLowerCase().includes('emergency')?'Emergency fund':'Savings',amount:n,description:'Contribution: '+g.name,priority:'Need'});persist();toast('Savings progress updated.')};
+function switchTab(tab){document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===tab));document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));$('moreMenu').classList.remove('open');$('moreBtn').setAttribute('aria-expanded','false');window.scrollTo({top:0,behavior:'smooth'})}
+document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>switchTab(b.dataset.tab)));
+function toggleMore(){const open=$('moreMenu').classList.toggle('open');$('moreBtn').setAttribute('aria-expanded',String(open))}
+$('moreBtn').addEventListener('click',toggleMore);
+document.querySelectorAll('[data-more]').forEach(b=>b.addEventListener('click',toggleMore));
+document.addEventListener('click',e=>{if(!e.target.closest('#moreMenu')&&!e.target.closest('#moreBtn')&&!e.target.closest('[data-more]')){$('moreMenu').classList.remove('open');$('moreBtn').setAttribute('aria-expanded','false')}});
+document.querySelectorAll('[data-goto]').forEach(b=>b.addEventListener('click',()=>switchTab(b.dataset.goto)));
+document.querySelectorAll('[data-quick]').forEach(b=>b.addEventListener('click',()=>{switchTab('activity');$('txType').value=b.dataset.quick;$('txAmount').focus()}));
+$('txDate').value=isoToday();$('weekStart').value=state.weekStart;
+$('txType').addEventListener('change',()=>{let t=$('txType').value;let incoming=['Allowance','Extra from Parents'].includes(t);$('txCategoryField').style.display=incoming?'none':'';$('txPriorityField').style.display=t==='Expense'?'':'none';if(incoming)$('txCategory').value='Other';else if(t==='Savings Transfer')$('txCategory').value='Savings'});$('txType').dispatchEvent(new Event('change'));
+$('txForm').addEventListener('submit',e=>{e.preventDefault();let amount=Number($('txAmount').value);if(!Number.isFinite(amount)||amount<=0){toast('Enter a valid amount.');return}let txType=$('txType').value;const availableBalance=state.currentBalance===null||state.currentBalance===undefined?totals().left:Number(state.currentBalance);if(txType==='Expense'&&availableBalance<=0){alert("You have 0 balance, you can\'t add expense or spend.");return}state.transactions.push({id:state.nextId++,type:txType,amount,category:$('txCategory').value,date:$('txDate').value,description:$('txDesc').value.trim()||$('txCategory').value,priority:txType==='Expense'?$('txNeed').value:'',notes:$('txNotes').value.trim()});if(state.currentBalance!==null&&state.currentBalance!==undefined){if(['Allowance','Extra from Parents','Refund'].includes(txType))state.currentBalance=Number(state.currentBalance)+amount;else state.currentBalance=Math.max(0,Number(state.currentBalance)-amount)}state.transactions.sort((a,b)=>a.date.localeCompare(b.date));persist();e.target.reset();$('txDate').value=isoToday();$('txType').value='Expense';$('txType').dispatchEvent(new Event('change'));toast('Transaction saved.')});
+$('saveBudget').addEventListener('click',()=>{state.weeklyAllowance=Math.max(0,Number($('weeklyAllowance').value)||0);state.weekStart=startOfWeek($('weekStart').value||isoToday());persist();toast('Weekly plan updated.')});
+$('goalForm').addEventListener('submit',e=>{e.preventDefault();let target=Number($('goalTarget').value);if(target<=0){toast('Enter a target above zero.');return}state.goals.push({id:state.nextId++,name:$('goalName').value.trim(),target,saved:0});persist();e.target.reset();toast('Savings goal added.')});
+$('toggleBalanceEditor').addEventListener('click',()=>{balanceEditorOpen=!balanceEditorOpen;render()});
+$('saveCurrentBalance').addEventListener('click',()=>{let value=Number($('currentBalanceInput').value);if(!Number.isFinite(value)||value<0){toast('Enter a valid current amount.');return}state.currentBalance=value;balanceEditorOpen=false;persist();toast('Current money amount updated.')});
+$('clearCurrentBalance').addEventListener('click',()=>{state.currentBalance=null;balanceEditorOpen=false;persist();toast('Balance now uses recorded transactions.')});
+
+function receiptData(){const t=totals();const balance=state.currentBalance===null||state.currentBalance===undefined?t.left:Number(state.currentBalance);const start=new Date(state.weekStart+'T00:00:00');const end=new Date(start);end.setDate(end.getDate()+6);const fmt=d=>d.toLocaleDateString(undefined,{month:'short',day:'numeric'});return {t,balance,period:fmt(start)+' – '+fmt(end),biggest:t.biggest?t.biggest[0]+' · '+money(t.biggest[1]):'No expenses yet'};}
+function receiptMarkup(){
+ const d=receiptData();
+ const activity=[...weekly()].sort((a,b)=>a.date.localeCompare(b.date)||a.id-b.id);
+ const rows=activity.length?activity.map(t=>`<tr>
+ <td style="padding:7px 3px;border-bottom:1px dashed #ddd;white-space:nowrap">${safe(t.date)}</td>
+ <td style="padding:7px 3px;border-bottom:1px dashed #ddd"><strong>${safe(t.description||t.category||t.type)}</strong><div style="font-size:10px;color:#666">${safe(t.category||'—')}</div></td>
+ <td style="padding:7px 3px;border-bottom:1px dashed #ddd;font-size:10px">${safe(t.type)}</td>
+ <td style="padding:7px 3px;border-bottom:1px dashed #ddd;text-align:right;white-space:nowrap">${money(t.amount)}</td>
+ </tr>`).join(''):'<tr><td colspan="4" style="padding:14px 3px;text-align:center;color:#666">No activities recorded this week.</td></tr>';
+ return `<div style="background:#fbfaf7;color:#242424;border:1px dashed #c9c2b5;padding:20px 16px;font-family:ui-monospace,Menlo,monospace"><div style="text-align:center;font-weight:900;font-size:18px;letter-spacing:1px">STUDENT WALLET</div><div style="text-align:center;font-size:11px;color:#666;margin:5px 0 16px">WEEKLY FINANCIAL RECEIPT</div><hr style="border:0;border-top:1px dashed #bbb"><div style="display:flex;justify-content:space-between;font-size:12px;margin:10px 0"><span>Week</span><b>${safe(d.period)}</b></div><hr style="border:0;border-top:1px dashed #bbb"><div style="font-weight:800;font-size:12px;margin:12px 0 6px">COMPLETE ACTIVITY HISTORY (${activity.length})</div><table style="width:100%;border-collapse:collapse;font-size:11px;text-align:left"><thead><tr style="border-bottom:1px solid #aaa"><th style="padding:6px 3px">Date</th><th style="padding:6px 3px">Description</th><th style="padding:6px 3px">Type</th><th style="padding:6px 3px;text-align:right">Amount</th></tr></thead><tbody>${rows}</tbody></table><hr style="border:0;border-top:1px dashed #bbb;margin-top:12px"><div style="display:flex;justify-content:space-between;margin:10px 0"><span>Allowance / Income</span><b>${money(d.t.income)}</b></div><div style="display:flex;justify-content:space-between;margin:10px 0"><span>Total expenses</span><b style="color:#b42318">−${money(d.t.spent)}</b></div><div style="display:flex;justify-content:space-between;margin:10px 0"><span>Savings transfers</span><b style="color:#18794e">${money(d.t.saved)}</b></div><hr style="border:0;border-top:1px dashed #bbb"><div style="display:flex;justify-content:space-between;align-items:center;margin:14px 0;font-weight:900"><span>REMAINING BALANCE</span><span style="font-size:20px;color:#18794e">${money(d.balance)}</span></div><div style="font-size:11px;text-align:center;color:#666;margin-top:18px">Keep tracking. Keep saving.</div></div>`;
+}
+function showReceipt(){ $('receiptPreview').innerHTML=receiptMarkup();$('receiptModal').style.display='block';}
+function downloadReceipt(){
+ const d=receiptData();
+ const activity=[...weekly()].sort((a,b)=>a.date.localeCompare(b.date)||a.id-b.id);
+ const lines=[];
+ const add=(text,kind='normal')=>lines.push({text:String(text),kind});
+ add('STUDENT WALLET','title');add('WEEKLY FINANCIAL RECEIPT','subtitle');add('Week: '+d.period);add('');add('COMPLETE ACTIVITY HISTORY ('+activity.length+')','heading');
+ if(activity.length){
+  add('DATE          DESCRIPTION / TYPE                 AMOUNT','tablehead');
+  activity.forEach(t=>{
+   add((dateKey(t.date)||t.date)+'  '+(t.description||t.category||t.type)+' | '+t.type+' | '+(t.category||'—')+' | '+money(t.amount),'activity');
+  });
+ }else add('No activities recorded this week.');
+ add('');add('SUMMARY','heading');add('Allowance / Income: '+money(d.t.income));add('Total expenses: -'+money(d.t.spent));add('Savings transfers: '+money(d.t.saved));add('REMAINING BALANCE: '+money(d.balance),'balance');add('');add('Keep tracking. Keep saving.','footer');
+ const lineHeight=34,top=65,bottom=65,canvas=document.createElement('canvas');
+ canvas.width=1100;canvas.height=top+lines.length*lineHeight+bottom;
+ const c=canvas.getContext('2d');c.fillStyle='#fbfaf7';c.fillRect(0,0,canvas.width,canvas.height);
+ c.strokeStyle='#c9c2b5';c.setLineDash([9,7]);c.lineWidth=3;c.strokeRect(30,30,canvas.width-60,canvas.height-60);c.setLineDash([]);
+ let y=top;
+ for(const item of lines){
+  c.textAlign=item.kind==='title'||item.kind==='subtitle'||item.kind==='footer'?'center':'left';
+  c.font=item.kind==='title'?'bold 38px monospace':item.kind==='subtitle'?'22px monospace':item.kind==='heading'?'bold 25px monospace':item.kind==='balance'?'bold 27px monospace':item.kind==='tablehead'?'bold 17px monospace':item.kind==='activity'?'17px monospace':'20px monospace';
+  c.fillStyle=item.kind==='subtitle'||item.kind==='footer'?'#666':item.kind==='balance'?'#18794e':'#242424';
+  const text=item.text;
+  const maxWidth= item.kind==='activity'?980:1000;
+  const words=text.split(' ');let current='';
+  if(item.kind==='activity'){
+   for(const word of words){const test=current?current+' '+word:word;if(c.measureText(test).width>maxWidth&&current){c.fillText(current,65,y);y+=25;current=word}else current=test}
+   c.fillText(current,65,y);y+=lineHeight-25;
+  }else c.fillText(text, item.kind==='title'||item.kind==='subtitle'||item.kind==='footer'?550:65,y);
+  y+=lineHeight;
+ }
+ const a=document.createElement('a');a.download='student-wallet-weekly-receipt.png';a.href=canvas.toDataURL('image/png');a.click();
+}
+$('hamburgerBtn').addEventListener('click',()=>{const menu=$('menuDropdown');menu.classList.toggle('open');$('hamburgerBtn').setAttribute('aria-expanded',menu.classList.contains('open'))});document.addEventListener('click',e=>{if(!e.target.closest('.menu-wrap')){$('menuDropdown').classList.remove('open');$('hamburgerBtn').setAttribute('aria-expanded','false')}});$('accountBtn').addEventListener('click',()=>{$('usernameInput').value=state.username||'';$('accountModal').style.display='block';$('accountTitle').textContent=state.username?'Update username':'Create your account';$('menuDropdown').classList.remove('open')});$('closeAccountBtn').addEventListener('click',()=>$('accountModal').style.display='none');$('accountForm').addEventListener('submit',e=>{e.preventDefault();const username=$('usernameInput').value.trim();if(!username){toast('Enter a username.');return}state.username=username;persist();$('accountModal').style.display='none';toast(`Welcome, ${username}!`)});
+$('viewReceiptBtn').addEventListener('click',showReceipt);$('downloadReceiptBtn').addEventListener('click',downloadReceipt);$('modalDownloadReceiptBtn').addEventListener('click',downloadReceipt);$('closeReceiptBtn').addEventListener('click',()=>$('receiptModal').style.display='none');$('receiptModal').addEventListener('click',e=>{if(e.target===$('receiptModal'))$('receiptModal').style.display='none'});$('modalPrintReceiptBtn').addEventListener('click',()=>{const w=window.open('','_blank');if(!w){toast('Allow pop-ups to print or save as PDF.');return}w.document.write('<html><head><title>Student Wallet Receipt</title></head><body>'+receiptMarkup()+'</body></html>');w.document.close();w.focus();w.print()});
+
+$('filterType').addEventListener('change',render);
+$('exportBtn').addEventListener('click',()=>{let blob=new Blob([JSON.stringify({exportedAt:new Date().toISOString(),...state},null,2)],{type:'application/json'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='student-wallet-backup.json';a.click();URL.revokeObjectURL(a.href);toast('Backup exported.')});
+
+$('loanDate').value=isoToday();
+$('loanForm').addEventListener('submit',e=>{e.preventDefault();let amount=Number($('loanAmount').value);if(!Number.isFinite(amount)||amount<=0){toast('Maglagay ng valid na amount.');return}const loanId=state.nextId++;const loanDate=$('loanDate').value;const person=$('loanPerson').value.trim();const direction=$('loanDirection').value;state.loans.push({id:loanId,direction,person,amount,remaining:amount,changeDue:0,changeReturned:0,date:loanDate,note:$('loanNote').value.trim(),paid:false});state.transactions.push({id:state.nextId++,date:loanDate,type:'Utang',category:'Utang at Sukli',amount,description:(direction==='theyOwe'?'May utang sa iyo si ':'Ikaw ang may utang kay ')+person,notes:$('loanNote').value.trim()});persist();e.target.reset();$('loanDate').value=isoToday();toast('Utang recorded.')});
+function renderLoans(){
+ const arr=state.loans||[];
+ const total=(dir)=>arr.filter(x=>x.direction===dir).reduce((s,x)=>s+Math.max(0,Number(x.remaining)||0),0);
+ $('loanOwe').textContent=money(total('iOwe'));$('loanOwed').textContent=money(total('theyOwe'));
+ $('changeYouOwe').textContent=money(arr.reduce((s,x)=>s+(x.direction==='theyOwe'?Math.max(0,(x.changeDue||0)-(x.changeReturned||0)):0),0));
+ $('changeOwedToYou').textContent=money(arr.reduce((s,x)=>s+(x.direction==='iOwe'?Math.max(0,(x.changeDue||0)-(x.changeReturned||0)):0),0));
+ $('loanList').innerHTML=arr.length?arr.map(x=>`<div class="item"><div class="row"><strong>${safe(x.person)}</strong><span class="pill">${x.direction==='theyOwe'?'May utang sa iyo':'Ikaw ang may utang'}</span></div><div class="muted">${safe(x.date)}${x.note?' · '+safe(x.note):''}</div><div class="row" style="margin-top:8px"><span>Natitirang utang: <strong>${money(x.remaining)}</strong></span><span>Sukli: <strong>${money(Math.max(0,(x.changeDue||0)-(x.changeReturned||0)))}</strong></span></div><div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:10px"><button class="secondary" onclick="showLoanReceipt(${x.id})">🧾 Receipt</button><button class="secondary" onclick="loanPayment(${x.id})">Record bayad</button><button class="secondary" onclick="loanChangeReturn(${x.id})">Record sukli returned</button><button class="danger" onclick="deleteLoan(${x.id})">Delete</button></div></div>`).join(''):'<div class="empty">Wala pang recorded na utang.</div>';
+}
+function loanReceiptMarkup(x){const pending=Math.max(0,(x.changeDue||0)-(x.changeReturned||0));const direction=x.direction==='theyOwe'?'May utang sa iyo':'Ikaw ang may utang';return `<div id="loanReceiptPaper" style="background:#fbfaf7;color:#242424;border:1px dashed #c9c2b5;padding:20px 16px;font-family:ui-monospace,Menlo,monospace"><div style="text-align:center;font-weight:900;font-size:18px;letter-spacing:1px">STUDENT WALLET</div><div style="text-align:center;font-size:11px;color:#666;margin:5px 0 16px">UTANG & SUKLI RECEIPT</div><hr style="border:0;border-top:1px dashed #bbb"><div style="margin:10px 0"><b>Username:</b> ${safe(state.username||'Student')}<br><b>Person:</b> ${safe(x.person)}<br><b>Type:</b> ${safe(direction)}<br><b>Date:</b> ${safe(x.date)}</div><hr style="border:0;border-top:1px dashed #bbb"><div style="display:flex;justify-content:space-between;margin:10px 0"><span>Original amount</span><b>${money(x.amount)}</b></div><div style="display:flex;justify-content:space-between;margin:10px 0"><span>Remaining balance</span><b>${money(x.remaining)}</b></div><div style="display:flex;justify-content:space-between;margin:10px 0"><span>Pending sukli</span><b>${money(pending)}</b></div>${x.note?`<div style="margin:10px 0"><b>Note:</b> ${safe(x.note)}</div>`:''}<hr style="border:0;border-top:1px dashed #bbb"><div style="font-size:11px;text-align:center;color:#666;margin-top:18px">Generated by Student Wallet</div></div>`}
+function showLoanReceipt(id){const x=state.loans.find(a=>a.id===id);if(!x)return;$('loanReceiptPreview').innerHTML=loanReceiptMarkup(x);$('loanReceiptModal').style.display='block';$('loanReceiptModal').dataset.loanId=id;}
+function downloadLoanReceipt(){
+ const id=Number($('loanReceiptModal').dataset.loanId);
+ const x=state.loans.find(a=>a.id===id);
+ if(!x){toast('Receipt record not found.');return}
+ const paper=$('loanReceiptPaper');
+ if(!paper){toast('Open the receipt preview first.');return}
+ const pending=Math.max(0,(x.changeDue||0)-(x.changeReturned||0));
+ const lines=[
+  'STUDENT WALLET',
+  'UTANG & SUKLI RECEIPT',
+  '',
+  'Username: '+(state.username||'Student'),
+  'Person: '+x.person,
+  'Type: '+(x.direction==='theyOwe'?'May utang sa iyo':'Ikaw ang may utang'),
+  'Date: '+x.date,
+  '',
+  'Original amount: '+money(x.amount),
+  'Remaining balance: '+money(x.remaining),
+  'Pending sukli: '+money(pending),
+  x.note?'Note: '+x.note:'',
+  '',
+  'Generated by Student Wallet'
+ ].filter(Boolean);
+ // Render a receipt image from the selected loan record.
+ const canvas=document.createElement('canvas');
+ canvas.width=1000; canvas.height=Math.max(800,150+lines.length*54);
+ const c=canvas.getContext('2d');
+ c.fillStyle='#fbfaf7';c.fillRect(0,0,canvas.width,canvas.height);
+ c.strokeStyle='#c9c2b5';c.lineWidth=3;c.setLineDash([9,7]);c.strokeRect(30,30,canvas.width-60,canvas.height-60);c.setLineDash([]);
+ c.textAlign='center';c.fillStyle='#242424';c.font='bold 38px monospace';c.fillText(lines[0],500,100);
+ c.font='22px monospace';c.fillStyle='#666';c.fillText(lines[1],500,145);
+ c.strokeStyle='#aaa';c.setLineDash([8,7]);c.beginPath();c.moveTo(80,175);c.lineTo(920,175);c.stroke();c.setLineDash([]);
+ c.textAlign='left';c.font='24px monospace';c.fillStyle='#242424';
+ let y=230;
+ for(let i=2;i<lines.length;i++){
+   if(lines[i]===''){y+=24;continue}
+   c.fillText(lines[i].slice(0,65),90,y);y+=54;
+ }
+ const filename='student-wallet-utang-receipt-'+id+'.png';
+ try{
+  canvas.toBlob(blob=>{
+   if(!blob){toast('Could not create receipt image. Use Print / Save PDF.');return}
+   const url=URL.createObjectURL(blob);
+   const a=document.createElement('a');a.href=url;a.download=filename;a.style.display='none';
+   document.body.appendChild(a);a.click();a.remove();
+   setTimeout(()=>URL.revokeObjectURL(url),1500);
+   toast('Receipt download requested. If SPCK blocks it, open this app in Chrome and try again.');
+  },'image/png');
+ }catch(err){
+  toast('Download is blocked in this preview. Open the HTML in Chrome or use Print / Save PDF.');
+ }
+}
+$('closeLoanReceiptBtn').addEventListener('click',()=>$('loanReceiptModal').style.display='none');$('loanReceiptModal').addEventListener('click',e=>{if(e.target===$('loanReceiptModal'))$('loanReceiptModal').style.display='none'});$('downloadLoanReceiptBtn').addEventListener('click',downloadLoanReceipt);$('printLoanReceiptBtn').addEventListener('click',()=>{const paper=$('loanReceiptPaper');if(!paper)return;const w=window.open('','_blank');if(!w){toast('Allow pop-ups to print or save as PDF.');return}w.document.write('<html><head><title>Utang Receipt</title><meta name="viewport" content="width=device-width,initial-scale=1"></head><body>'+paper.outerHTML+'</body></html>');w.document.close();w.focus();setTimeout(()=>w.print(),300);});
+window.loanPayment=id=>{let x=state.loans.find(a=>a.id===id);if(!x)return;let val=prompt(`Magkano ang total na bayad/perang ibinigay? (₱)\\nNatitirang utang: ${money(x.remaining)}`);if(val===null)return;let n=Number(val);if(!Number.isFinite(n)||n<=0){toast('Invalid amount.');return}let applied=Math.min(n,x.remaining);x.remaining=Math.max(0,x.remaining-applied);let excess=n-applied;if(excess>0)x.changeDue=(x.changeDue||0)+excess;state.transactions.push({id:state.nextId++,date:isoToday(),type:'Bayad Utang',category:'Utang at Sukli',amount:n,description:'Bayad: '+x.person,notes:excess>0?'May sukli na pending na ibalik.':''});persist();toast(excess>0?'Bayad recorded; may sukli pang dapat ibalik.':'Bayad recorded.')};
+window.loanChangeReturn=id=>{let x=state.loans.find(a=>a.id===id);if(!x)return;let outstanding=Math.max(0,(x.changeDue||0)-(x.changeReturned||0));if(!outstanding){toast('Walang pending na sukli.');return}let val=prompt(`Magkano ang sukli na ibinalik? (₱)\\nPending: ${money(outstanding)}`);if(val===null)return;let n=Number(val);if(!Number.isFinite(n)||n<=0||n>outstanding){toast('Enter amount up to pending sukli.');return}x.changeReturned=(x.changeReturned||0)+n;state.transactions.push({id:state.nextId++,date:isoToday(),type:'Sukli Return',category:'Utang at Sukli',amount:n,description:'Sukli returned: '+x.person});persist();toast('Sukli return recorded.')};
+window.deleteLoan=id=>{if(confirm('Delete this utang record?')){state.loans=state.loans.filter(x=>x.id!==id);persist()}};
+
+// Money Challenge is an optional online layer. Existing wallet data remains local and unchanged.
+let challengeClient=null, challengeUser=null, activeChallengeGroup=null, challengeGroups=[];
+const challengeConfig=(()=>{try{return JSON.parse(localStorage.getItem('studentWalletChallengeConfig')||'{}')}catch(e){return {}}})();
+$('sbUrl').value=challengeConfig.url||'';$('sbKey').value=challengeConfig.key||'';
+function challengeWeek(){return startOfWeek(isoToday())}
+function challengeWeekEnd(){return addDays(challengeWeek(),6)}
+function challengeBalance(){const t=totals();return Math.max(0,Number(state.currentBalance===null||state.currentBalance===undefined?t.left:state.currentBalance)||0)}
+function challengeStatus(msg){$('cloudStatus').textContent=msg}
+function initChallengeClient(){if(!window.supabase?.createClient){challengeStatus('Could not load the online service library. Check your internet connection.');return false}const url=$('sbUrl').value.trim().replace(/\/$/,''),key=$('sbKey').value.trim();if(!url||!key){challengeStatus('Add your Supabase Project URL and anon/public key first.');return false}if(!/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(url)){challengeStatus('Project URL must look like https://your-project-ref.supabase.co');return false}try{const diagnosticFetch=async(input,init)=>{const response=await fetch(input,init);const type=response.headers.get('content-type')||'';if(!type.toLowerCase().includes('json')){const body=(await response.clone().text()).slice(0,180).replace(/\s+/g,' ').trim();throw new Error('Server returned HTTP '+response.status+' ('+response.statusText+'), not JSON. Response: '+(body||'[empty]')+'. Check the full Project URL and whether the Supabase project is active.')}return response};challengeClient=window.supabase.createClient(url,key,{global:{fetch:diagnosticFetch}});localStorage.setItem('studentWalletChallengeConfig',JSON.stringify({url,key}));challengeStatus('Settings saved. Try signing up or logging in to test the server connection.');return true}catch(e){challengeClient=null;challengeStatus('Supabase setup error: '+(e&&e.message?e.message:String(e)));return false}}
+$('saveCloudConfig').addEventListener('click',()=>{if(initChallengeClient())toast('Online challenge service configured.');});
+async function challengeAuth(action){if(!challengeClient&&!initChallengeClient())return;const email=$('challengeEmail').value.trim(),password=$('challengePassword').value;if(!email||password.length<6){toast('Enter a valid email and password (at least 6 characters).');return}try{const result=action==='signup'?await challengeClient.auth.signUp({email,password}):await challengeClient.auth.signInWithPassword({email,password});if(result.error)throw result.error;challengeUser=result.data.user;if(!result.data.session){challengeStatus('Check your email to confirm your account, then log in.');toast('Confirmation email sent.');return}await loadChallengeGroups();$('challengeSignOut').style.display='block';$('challengeGroupCard').style.display='block';challengeStatus('Logged in as '+email+'. Your wallet entries remain on this device.');toast('Challenge account connected.')}catch(e){toast(e.message||'Could not authenticate.');}}
+$('challengeSignUp').addEventListener('click',()=>challengeAuth('signup'));$('challengeSignIn').addEventListener('click',()=>challengeAuth('login'));
+$('challengeSignOut').addEventListener('click',async()=>{if(challengeClient)await challengeClient.auth.signOut();challengeUser=null;activeChallengeGroup=null;challengeGroups=[];$('challengeGroupCard').style.display='none';$('challengeBoardCard').style.display='none';$('challengeSignOut').style.display='none';challengeStatus('Logged out. Your personal wallet is unchanged.');});
+async function loadChallengeGroups(){if(!challengeClient)return;const {data,error}=await challengeClient.rpc('money_challenge_my_groups');if(error)throw error;challengeGroups=data||[];renderChallengeGroups();if(challengeGroups.length){activeChallengeGroup=challengeGroups[0].group_id;await updateChallengeScore(false)}}
+function renderChallengeGroups(){$('myChallengeGroups').innerHTML=challengeGroups.length?'<div class="field"><label for="challengeGroupSelect">Your groups</label><select id="challengeGroupSelect" class="challenge-input">'+challengeGroups.map(g=>`<option value="${safe(g.group_id)}" ${g.group_id===activeChallengeGroup?'selected':''}>${safe(g.group_name)} · Code: ${safe(g.invite_code)}</option>`).join('')+'</select></div>':'<p class="muted">You have not joined a group yet.</p>';const sel=$('challengeGroupSelect');if(sel)sel.addEventListener('change',async()=>{activeChallengeGroup=sel.value;await loadChallengeBoard()})}
+$('createChallengeGroup').addEventListener('click',async()=>{try{if(!challengeClient||!challengeUser){toast('Log in first.');return}const name=$('challengeGroupName').value.trim();if(!name){toast('Enter a group name.');return}const {data,error}=await challengeClient.rpc('money_challenge_create_group',{p_group_name:name,p_username:state.username||'Student'});if(error)throw error;activeChallengeGroup=data.group_id;await loadChallengeGroups();toast('Group created. Share the invite code with friends.')}catch(e){toast(e.message||'Could not create group.')}});
+$('joinChallengeGroup').addEventListener('click',async()=>{try{if(!challengeClient||!challengeUser){toast('Log in first.');return}const code=$('challengeInviteCode').value.trim().toUpperCase();if(!code){toast('Enter an invite code.');return}const {data,error}=await challengeClient.rpc('money_challenge_join_group',{p_invite_code:code,p_username:state.username||'Student'});if(error)throw error;activeChallengeGroup=data.group_id;await loadChallengeGroups();toast('You joined the group.')}catch(e){toast(e.message||'Could not join group.')}});
+async function updateChallengeScore(showMessage=true){if(!challengeClient||!challengeUser||!activeChallengeGroup)return;try{const {error}=await challengeClient.rpc('money_challenge_submit_score',{p_week_start:challengeWeek(),p_balance:challengeBalance()});if(error)throw error;await loadChallengeBoard();if(showMessage)toast('Your weekly ranking has been updated.')}catch(e){if(showMessage)toast(e.message||'Could not update ranking.')}}
+async function submitChallengeScore(){if(!challengeClient||!challengeUser||!activeChallengeGroup){toast('Log in and select a group first.');return}await updateChallengeScore(true)}
+async function loadChallengeBoard(){if(!challengeClient||!activeChallengeGroup)return;try{const group=challengeGroups.find(g=>g.group_id===activeChallengeGroup);$('activeChallengeGroup').textContent=group?group.group_name:'';$('challengeBoardCard').style.display='block';$('challengeWeekEnd').textContent=new Date(challengeWeekEnd()+'T12:00:00').toLocaleDateString('en-PH',{month:'short',day:'numeric'});$('challengeRoundNote').textContent='Weekly round: '+challengeWeek()+' to '+challengeWeekEnd()+'. Your balance is never shown.';const {data,error}=await challengeClient.rpc('money_challenge_leaderboard',{p_group_id:activeChallengeGroup,p_week_start:challengeWeek()});if(error)throw error;const rows=data||[];$('challengeLeaderboard').innerHTML=rows.length?rows.map(r=>`<li><span><span class="rank-number">#${r.rank_no}</span><strong>${safe(r.username)}</strong></span>${r.user_id===challengeUser.id?'<span class="pill">You</span>':''}</li>`).join(''):'<li class="empty">No scores yet. Tap “Update my weekly ranking” to join this round.</li>';const mine=rows.find(r=>r.user_id===challengeUser.id);$('myChallengeRank').textContent=mine?'#'+mine.rank_no:'Not ranked';}catch(e){toast(e.message||'Could not load leaderboard.')}}
+$('submitChallengeScore').addEventListener('click',submitChallengeScore);$('refreshChallengeBoard').addEventListener('click',loadChallengeBoard);setInterval(()=>{if(challengeClient&&challengeUser&&activeChallengeGroup&&$('challenge').classList.contains('active'))loadChallengeBoard()},20000);
+(async()=>{if(challengeConfig.url&&challengeConfig.key&&initChallengeClient()){const {data}=await challengeClient.auth.getSession();if(data.session){challengeUser=data.session.user;$('challengeSignOut').style.display='block';$('challengeGroupCard').style.display='block';try{await loadChallengeGroups()}catch(e){challengeStatus('Database setup is not complete yet. Follow the included setup guide.')}}}})();
+const lessons=[
+['1. Make your allowance last','Plan for the number of days until your next allowance. Record the full amount when your parents give it to you.','Try this: divide your available spending money by the days remaining in the week.'],
+['2. Needs before wants','Food, necessary transport, required school costs, and essential data generally come before optional purchases.','Try this: label purchases Need or Want before you buy.'],
+['3. Save a realistic amount first','Consistency matters more than a big amount. In a tight week, saving a small amount—or pausing savings to cover essentials—is okay.','Try this: choose a weekly amount you can repeat without skipping essentials.'],
+['4. Build an emergency fund','A small reserve can help with urgent transport, school, or health-related costs. Keep it separate from money for ordinary spending.','Try this: set a first target such as ₱500, then build it gradually.'],
+['5. Watch small dorm expenses','Snacks, drinks, delivery fees, laundry, and little convenience purchases can add up over a week.','Try this: track every purchase for seven days, even if it is only ₱10.'],
+['6. Stay safe with digital money','Never share your OTP, PIN, or password. Check the recipient and use official apps when paying or transferring money.','Try this: pause and verify before sending money.'],
+['7. Avoid “get rich quick” promises','You do not need to invest or start a business before you are ready. Be careful with guaranteed returns, pressure to recruit friends, and borrowing to invest.','Try this: build your budget and savings habit first.'],
+['8. Review without guilt','A budget is a guide. If actual costs are higher, update the plan rather than blaming yourself.','Try this: each week, identify one thing to keep and one thing to improve.']
+];
+$('lessons').innerHTML=lessons.map((l,i)=>`<div class="lesson"><div class="row"><strong>${l[0]}</strong><span class="pill">Lesson ${i+1}</span></div><p>${l[1]}</p><p><strong>Action:</strong> ${l[2].replace('Try this: ','')}</p><label class="checkline"><input type="checkbox" data-lesson="${i}"> I practiced this lesson</label></div>`).join('');
+try{let done=JSON.parse(localStorage.getItem('studentWalletLessons')||'[]');document.querySelectorAll('[data-lesson]').forEach(c=>c.checked=done.includes(Number(c.dataset.lesson)));document.querySelectorAll('[data-lesson]').forEach(c=>c.addEventListener('change',()=>{let a=[...document.querySelectorAll('[data-lesson]:checked')].map(x=>Number(x.dataset.lesson));localStorage.setItem('studentWalletLessons',JSON.stringify(a));toast('Lesson progress saved.')}))}catch(e){}
+const tips=['Record each purchase right after you make it. Small purchases count too.','Before buying a want, pause and ask whether it will affect food or transport later this week.','A small amount saved consistently is a useful start. Essentials come first.','Check whether your dorm fee or family already covers a cost before budgeting for it again.','At the end of the week, review what surprised you instead of judging yourself.'];$('dailyTip').textContent=tips[new Date().getDay()%tips.length];
+$('filterType').value='All';try{localStorage.setItem('studentWalletAppV2',JSON.stringify(state))}catch(e){}render();
+</script>
+</body>
+</html>
